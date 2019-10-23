@@ -1,0 +1,10 @@
+# test to speech
+#!/bin/bash
+
+string=$@
+
+speech=${string%>*}
+speech=${speech#*en}
+
+espeak "..."
+espeak -a 200 -p 99 -s 150 -g 7 -k 20  "$string" --stdout|play -v 10 - synth sine fmod 25
