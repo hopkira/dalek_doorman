@@ -9,7 +9,7 @@ import dalek_db as db
 from os import listdir
 from os.path import isfile, join
 
-DEAD_TIME = 600 # minimum time in seconds between doorman annoucemnents
+DEAD_TIME = 30 # minimum time in seconds between doorman annoucemnents
 EVENT_GAP = 3 # maximum time window in seconds for valid detection events
 THRESHOLD = 3 # no. of recognition events needed with less than EVENT_GAP between them to hit threshold
 UNKNOWN_THRESHOLD = 4 # numer of unknown events to hit threshold
@@ -82,8 +82,12 @@ class Person:
                     # upadating the Cloudant db with the current time,
                     # resetting the detection events counter to zero and
                     # initiating the dalek greeting
-                    db.update_doc(self.doc, "last_seen", self.now)
-                    db.save_doc(self.doc)
+                    self.doc = db.read_doc(my_db,self.name) # re-retrieve the relevant Cloudant document
+                    try:
+                        db.update_doc(self.doc, "last_seen", self.now)
+                        db.save_doc(self.doc)
+                    except:
+                        print("ERROR: Write error to database")
                     self.detection_events = 0
                     dalek_greeting(self.name, self.doc['in_house'])
                 else:

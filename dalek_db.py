@@ -28,7 +28,13 @@ def read_doc(db,_id):
     return document
 
 def update_doc(doc,key,value):
-    doc[key]=value    
+    try:
+        doc[key]=value
+    except:
+        print("ERROR: Updating document failed")
     
 def save_doc(doc):
-    doc.save()
+    try:
+        doc.save()
+    except:
+        print("ERROR: Saving document failed")

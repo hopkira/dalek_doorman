@@ -40,17 +40,23 @@ def device_detected_doc(doc,detected_time):
     doc -- the Cloudant document to be updated (one per device/user)
     detected_time -- the time (in time.time() format) that the device was detected
     '''
-    db.update_doc(doc,"device_detected",detected_time)
-    db.update_doc(doc,"in_house",True)
-    db.save_doc(doc)
+    try:
+        db.update_doc(doc,"device_detected",detected_time)
+        db.update_doc(doc,"in_house",True)
+        db.save_doc(doc)
+    except:
+        print("ERROR: Could not update device_detected and in_house status")
 
 def out_of_house_doc(doc):
     '''Records that the user is out of the house in Cloudant
 
     doc -- the Cloudant document to be updated
     '''
-    db.update_doc(doc,"in_house",False)
-    db.save_doc(doc)
+    try:
+        db.update_doc(doc,"in_house",False)
+        db.save_doc(doc)
+    except:
+        print("ERROR: Could not update in_house status")
 
 def who_is_in(active_devices):
     '''Returns a list of people in the house and maintains their status in Cloudant
